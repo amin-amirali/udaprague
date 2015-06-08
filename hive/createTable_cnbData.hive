@@ -1,0 +1,11 @@
+CREATE external TABLE cnb_data (
+	exch_date STRING
+	, country STRING
+	, currency STRING
+	, currency_amount STRING
+	, currency_symbol STRING
+	, exchange_rate STRING
+)
+ROW FORMAT DELIMITED FIELDS TERMINATED BY '|'
+LOCATION '/data/cnb/stage';
+
