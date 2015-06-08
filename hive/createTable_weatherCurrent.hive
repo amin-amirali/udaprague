@@ -1,0 +1,5 @@
+create external table udadata.stage_weather_forecastio (line MAP<STRING,STRING>)
+row format delimited
+COLLECTION ITEMS TERMINATED BY '\073'
+map keys terminated by '\t'
+LOCATION '/data/weather/forecastio/stage';
