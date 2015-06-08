@@ -7,6 +7,7 @@ ssh-keygen -t rsa -P "" -f ~/.ssh/id_dsa
 # for the slaves, use the public key
 cp ~/.ssh/id_dsa.pub /shared_data/id_rsa_master.pub
 cat ~/.ssh/id_dsa.pub >> ~/.ssh/authorized_keys
+cat /shared_data/id_rsa_host.pub >> ~/.ssh/authorized_keys
 
 # the ambari installation will need the private key
 cp ~/.ssh/id_dsa /shared_data/id_dsa

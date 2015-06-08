@@ -4,6 +4,7 @@
 sudo chmod +t /home
 mkdir -p /root/.ssh
 cat /shared_data/id_rsa_master.pub >> ~/.ssh/authorized_keys
+cat /shared_data/id_rsa_host.pub >> ~/.ssh/authorized_keys
 
 # install base tools
 yum install -y rpm curl wget unzip tar
