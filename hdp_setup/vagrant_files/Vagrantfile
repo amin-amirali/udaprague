@@ -1,0 +1,54 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure(2) do |config|
+
+  config.vm.box = "chef/centos-6.5"
+
+  # master
+  config.vm.define "master" do|master|
+    config.vm.hostname = "master"
+    master.vm.provider :virtualbox do |vb|
+      vb.memory = "10240"
+    end
+    master.vm.network "private_network", ip: "192.168.2.10"
+    master.vm.provision "shell", path: "/home/amin/bin/vagrant-scripts/provision-master.sh"
+    config.vm.synced_folder "/home/amin/Documents/projects/shared", "/shared_data"
+  end
+
+  # data node1
+  config.vm.define "data1" do |data1|
+    config.vm.hostname = "data1"
+    data1.vm.provider :virtualbox do |vb|
+      vb.memory = "4196"
+    end
+    data1.vm.network "private_network", ip: "192.168.2.11"
+    data1.vm.provision "shell", path: "/home/amin/bin/vagrant-scripts/provision-data.sh"
+    config.vm.synced_folder "/home/amin/Documents/projects/shared", "/shared_data"
+  end
+
+  # data node2
+  config.vm.define "data2" do |data2|
+    config.vm.hostname = "data2"
+    data2.vm.provider :virtualbox do |vb|
+      vb.memory = "4196"
+    end
+    data2.vm.network "private_network", ip: "192.168.2.12"
+    data2.vm.provision "shell", path: "/home/amin/bin/vagrant-scripts/provision-data.sh"
+    config.vm.synced_folder "/home/amin/Documents/projects/shared", "/shared_data"
+  end
+
+  # data node3
+  config.vm.define "data3" do |data3|
+    config.vm.hostname = "data3"
+    data3.vm.provider :virtualbox do |vb|
+      vb.memory = "4196"
+    end
+    data3.vm.network "private_network", ip: "192.168.2.13"
+    data3.vm.provision "shell", path: "/home/amin/bin/vagrant-scripts/provision-data.sh"
+    config.vm.synced_folder "/home/amin/Documents/projects/shared", "/shared_data"
+  end
+
+end
+
+
