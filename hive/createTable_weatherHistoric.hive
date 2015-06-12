@@ -1,4 +1,4 @@
-CREATE EXTERNAL TABLE ts_weather_full (
+CREATE EXTERNAL TABLE weather_historic (
 	ID STRING
 	, YEAR STRING
 	, MONTH STRING

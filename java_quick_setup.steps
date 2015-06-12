@@ -1,0 +1,13 @@
+DOwnload file: jdk1.8.0_25.tar.gz
+(http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
+
+cd /usr/lib64
+tar zxvf jdk1.8.0_25.tar.gz
+mv jdk1.8.0_25 java-jdk1.8.0_25
+
+# Add following lines to .bash_profile
+JAVA_HOME=/usr/lib64/java-jdk1.8.0_25
+PATH=$PATH:$HOME/bin:$JAVA_HOME/bin
+
+
+source ~/.bash_profile

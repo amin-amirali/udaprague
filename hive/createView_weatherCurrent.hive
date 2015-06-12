@@ -1,4 +1,4 @@
-CREATE VIEW udadata.view_weather_forecastio AS
+CREATE VIEW v_weather_current AS
 SELECT
 line["City"] AS City, 
 line["Latitude"] AS Latitude, 
@@ -949,13 +949,7 @@ line["day8_apparentTemperatureMax"] AS day8_apparentTemperatureMax,
 line["day8_time"] AS day8_time, 
 line["day8_precipIntensityMaxTime"] AS day8_precipIntensityMaxTime, 
 line["day8_apparentTemperatureMaxTime"] AS day8_apparentTemperatureMaxTime
-FROM udadata.stage_weather_forecastio
+FROM weather_current
 ; 
-
-
-
-
-
-
 
 
