@@ -4,3 +4,55 @@ mv apache-maven-3.2.5 /usr/local/
 export PATH=/usr/local/apache-maven-3.2.5/bin:$PATH  
 mvn -version
 
+
+
+-------------------------------------------------------
+to create a jar with dependencies, add the following before the projects dependencies:
+--- change <mainClass> as required!
+
+
+<build>
+    <plugins>
+        <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-jar-plugin</artifactId>
+            <version>2.2</version>
+            <!-- nothing here -->
+        </plugin>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-assembly-plugin</artifactId>
+            <version>2.2-beta-4</version>
+            <configuration>
+              <descriptorRefs>
+                <descriptorRef>jar-with-dependencies</descriptorRef>
+              </descriptorRefs>
+              <archive>
+                <manifest>
+                  <mainClass>com.saurzcode.twitter.TwitterKafkaProducer</mainClass>
+                </manifest>
+              </archive>
+            </configuration>
+            <executions>
+              <execution>
+                <phase>package</phase>
+                <goals>
+                  <goal>single</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <configuration>
+              <source>1.6</source>
+              <target>1.6</target>
+            </configuration>
+          </plugin>
+    </plugins>
+  </build>
+
+
+------------------------------------------------------------------
+
