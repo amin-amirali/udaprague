@@ -1,0 +1,7 @@
+Uou need to have some way to coordinating tasks, state management, configuration, etc across a distributed system. 
+Some projects have built their own mechanisms (think of the configuration server in a MongoDB sharded cluster, or a Master node in an Elasticsearch cluster). 
+
+Others have chosen to take advantage of Zookeeper as a general purpose distributed process coordination system. 
+So Kafka, Storm, HBase, SolrCloud to just name a few all use Zookeeper to help manage and coordinate.
+
+Kafka is a distributed system and is built to use Zookeeper. The fact that you are not using any of the distributed features of Kafka does change how it was built. In any event there should not be much overhead from using Zookeeper. A bigger question is why you would use this particular design pattern - a single broker implementation of Kafka misses out on all of the reliability features of a multi-broker cluster along with it's ability to scale.
