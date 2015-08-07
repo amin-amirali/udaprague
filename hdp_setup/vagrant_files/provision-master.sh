@@ -29,7 +29,7 @@ chmod 777 /etc/hosts
 echo "192.168.2.10    master" >> /etc/hosts
 echo "192.168.2.11    data1" >> /etc/hosts
 echo "192.168.2.12    data2" >> /etc/hosts
-echo "192.168.2.13    data3" >> /etc/hosts
+echo "192.168.2.13    secondary" >> /etc/hosts
 
 yum install -y httpd
 chkconfig httpd on

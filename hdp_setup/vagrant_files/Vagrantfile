@@ -12,41 +12,45 @@ Vagrant.configure(2) do |config|
       vb.memory = "10240"
     end
     master.vm.network "private_network", ip: "192.168.2.10"
-    master.vm.provision "shell", path: "/home/amin/bin/vagrant-scripts/provision-master.sh"
-    config.vm.synced_folder "/home/amin/Documents/projects/shared", "/shared_data"
+#    master.vm.provision "shell", path: "/home/amin/bin/vagrant-scripts/provision-master.sh"
+    master.vm.provision "shell", path: "provision-master.sh"
+    config.vm.synced_folder "../shared", "/shared_data"
   end
 
   # data node1
   config.vm.define "data1" do |data1|
     config.vm.hostname = "data1"
     data1.vm.provider :virtualbox do |vb|
-      vb.memory = "4196"
+      vb.memory = "5120"
     end
     data1.vm.network "private_network", ip: "192.168.2.11"
-    data1.vm.provision "shell", path: "/home/amin/bin/vagrant-scripts/provision-data.sh"
-    config.vm.synced_folder "/home/amin/Documents/projects/shared", "/shared_data"
+#    data1.vm.provision "shell", path: "/home/amin/bin/vagrant-scripts/provision-data.sh"
+    data1.vm.provision "shell", path: "provision-data.sh"
+    config.vm.synced_folder "../shared", "/shared_data"
   end
 
   # data node2
   config.vm.define "data2" do |data2|
     config.vm.hostname = "data2"
     data2.vm.provider :virtualbox do |vb|
-      vb.memory = "4196"
+      vb.memory = "5120"
     end
     data2.vm.network "private_network", ip: "192.168.2.12"
-    data2.vm.provision "shell", path: "/home/amin/bin/vagrant-scripts/provision-data.sh"
-    config.vm.synced_folder "/home/amin/Documents/projects/shared", "/shared_data"
+#    data2.vm.provision "shell", path: "/home/amin/bin/vagrant-scripts/provision-data.sh"
+    data2.vm.provision "shell", path: "provision-data.sh"
+    config.vm.synced_folder "../shared", "/shared_data"
   end
 
-  # data node3
-  config.vm.define "data3" do |data3|
-    config.vm.hostname = "data3"
-    data3.vm.provider :virtualbox do |vb|
-      vb.memory = "4196"
+  # secondary namenode and hive
+  config.vm.define "secondary" do |secondary|
+    config.vm.hostname = "secondary"
+    secondary.vm.provider :virtualbox do |vb|
+      vb.memory = "5120"
     end
-    data3.vm.network "private_network", ip: "192.168.2.13"
-    data3.vm.provision "shell", path: "/home/amin/bin/vagrant-scripts/provision-data.sh"
-    config.vm.synced_folder "/home/amin/Documents/projects/shared", "/shared_data"
+    secondary.vm.network "private_network", ip: "192.168.2.13"
+#    secondary.vm.provision "shell", path: "/home/amin/bin/vagrant-scripts/provision-data.sh"
+    secondary.vm.provision "shell", path: "provision-data.sh"
+    config.vm.synced_folder "../shared", "/shared_data"
   end
 
 end
