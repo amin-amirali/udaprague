@@ -6,10 +6,9 @@ vagrant destroy -f
 
 echo -e "creating new images from home folder\n"
 vagrant up master
-vagrant up data1 &
-vagrant up data2 &
-vagrant up secondary &
-wait
+vagrant up data1
+vagrant up data2
+vagrant up secondary
 
 vagrant halt
 
@@ -22,20 +21,19 @@ rm -rf /mnt/data4/vm_files/* &
 wait
 
 echo -e "make directories just in case they dont exist\n"
-mdkir -p /mnt/data1/vm_files &
-mdkir -p /mnt/data2/vm_files &
-mdkir -p /mnt/data3/vm_files &
-mdkir -p /mnt/data4/vm_files &
+mkdir -p /mnt/data1/vm_files &
+mkdir -p /mnt/data2/vm_files &
+mkdir -p /mnt/data3/vm_files &
+mkdir -p /mnt/data4/vm_files &
 wait
 
 
 
 echo -e "unregistering new VMs from Virtual Box\n"
-VBoxManage unregistervm `VBoxManage list vms | grep vagrant_files_data1 | awk '{ print $1 }' | tr -d '"'` &
-VBoxManage unregistervm `VBoxManage list vms | grep vagrant_files_data2 | awk '{ print $1 }' | tr -d '"'` &
-VBoxManage unregistervm `VBoxManage list vms | grep vagrant_files_secondary | awk '{ print $1 }' | tr -d '"'` &
-VBoxManage unregistervm `VBoxManage list vms | grep vagrant_files_master | awk '{ print $1 }' | tr -d '"'` &
-wait
+VBoxManage unregistervm `VBoxManage list vms | grep vagrant_files_data1 | awk '{ print $1 }' | tr -d '"'`
+VBoxManage unregistervm `VBoxManage list vms | grep vagrant_files_data2 | awk '{ print $1 }' | tr -d '"'`
+VBoxManage unregistervm `VBoxManage list vms | grep vagrant_files_secondary | awk '{ print $1 }' | tr -d '"'`
+VBoxManage unregistervm `VBoxManage list vms | grep vagrant_files_master | awk '{ print $1 }' | tr -d '"'`
 
 cd ~/VirtualBox\ VMs/
 echo -e "copying virtual disk data1\n"
@@ -46,6 +44,7 @@ echo -e "copying virtual disk secondary\n"
 cp -R `ls | grep secondary`/ /mnt/data4/vm_files
 echo -e "copying virtual disk master\n"
 cp -R `ls | grep master`/ /mnt/data1/vm_files
+
 echo -e "removing folders of new disks from home folder\n"
 rm -rf `ls | grep data1` &
 rm -rf `ls | grep data2` &
@@ -54,11 +53,10 @@ rm -rf `ls | grep master` &
 wait
 
 echo -e "registering new virtual images\n"
-VBoxManage registervm /mnt/data1/vm_files/`ls /mnt/data1/vm_files/ | grep master`/*.vbox &
-VBoxManage registervm /mnt/data2/vm_files/`ls /mnt/data2/vm_files/ | grep data1`/*.vbox &
-VBoxManage registervm /mnt/data3/vm_files/`ls /mnt/data3/vm_files/ | grep data2`/*.vbox &
-VBoxManage registervm /mnt/data4/vm_files/`ls /mnt/data4/vm_files/ | grep secondary`/*.vbox &
-wait
+VBoxManage registervm /mnt/data1/vm_files/`ls /mnt/data1/vm_files/ | grep master`/*.vbox
+VBoxManage registervm /mnt/data2/vm_files/`ls /mnt/data2/vm_files/ | grep data1`/*.vbox
+VBoxManage registervm /mnt/data3/vm_files/`ls /mnt/data3/vm_files/ | grep data2`/*.vbox
+VBoxManage registervm /mnt/data4/vm_files/`ls /mnt/data4/vm_files/ | grep secondary`/*.vbox
 
 echo -e "creating clone of disk file and increasing size limit to 930 GB\n"
 
@@ -68,45 +66,48 @@ VBoxManage clonehd `ls | grep .vmdk` `ls | grep .vmdk | sed -e 's/.vmdk//'`.vdi 
 VBoxManage modifyhd `ls | grep .vdi` --resize 204800
 VBoxManage modifyvm `ls ..` --hda none
 VBoxManage modifyvm `ls ..` --hda `ls | grep .vdi`
+VBoxManage closemedium disk `ls | grep .vmdk`
 rm -f `ls | grep .vmdk`
 
 echo -e "... for data1...\n"
 cd /mnt/data2/vm_files/`ls /mnt/data2/vm_files`
 VBoxManage clonehd `ls | grep .vmdk` `ls | grep .vmdk | sed -e 's/.vmdk//'`.vdi --format vdi 
-VBoxManage modifyhd `ls | grep .vdi` --resize 953344
+VBoxManage modifyhd `ls | grep .vdi` --resize 1907580
 VBoxManage modifyvm `ls ..` --hda none
 VBoxManage modifyvm `ls ..` --hda `ls | grep .vdi`
+VBoxManage closemedium disk `ls | grep .vmdk`
 rm -f `ls | grep .vmdk`
 
 echo -e "... for data2...\n"
 cd /mnt/data3/vm_files/`ls /mnt/data3/vm_files`
 VBoxManage clonehd `ls | grep .vmdk` `ls | grep .vmdk | sed -e 's/.vmdk//'`.vdi --format vdi 
-VBoxManage modifyhd `ls | grep .vdi` --resize 953344
+VBoxManage modifyhd `ls | grep .vdi` --resize 1907580
 VBoxManage modifyvm `ls ..` --hda none
 VBoxManage modifyvm `ls ..` --hda `ls | grep .vdi`
+VBoxManage closemedium disk `ls | grep .vmdk`
 rm -f `ls | grep .vmdk`
 
 echo -e "... for secondary...\n"
 cd /mnt/data4/vm_files/`ls /mnt/data4/vm_files`
 VBoxManage clonehd `ls | grep .vmdk` `ls | grep .vmdk | sed -e 's/.vmdk//'`.vdi --format vdi 
-VBoxManage modifyhd `ls | grep .vdi` --resize 953344
+VBoxManage modifyhd `ls | grep .vdi` --resize 1907580
 VBoxManage modifyvm `ls ..` --hda none
 VBoxManage modifyvm `ls ..` --hda `ls | grep .vdi`
+VBoxManage closemedium disk `ls | grep .vmdk`
 rm -f `ls | grep .vmdk`
 
 echo -e "adding a dvd storage unit and loading it with the previously downloaded gparted live iso\n"
-vboxmanage storageattach `ls /mnt/data1/vm_files` --storagectl "IDE Controller" --port 0 --device 1 --type dvddrive --medium $HOME"/Downloads/gparted-live-0.22.0-2-i586.iso" &
-vboxmanage storageattach `ls /mnt/data2/vm_files` --storagectl "IDE Controller" --port 0 --device 1 --type dvddrive --medium $HOME"/Downloads/gparted-live-0.22.0-2-i586.iso" &
-vboxmanage storageattach `ls /mnt/data3/vm_files` --storagectl "IDE Controller" --port 0 --device 1 --type dvddrive --medium $HOME"/Downloads/gparted-live-0.22.0-2-i586.iso" &
-vboxmanage storageattach `ls /mnt/data4/vm_files` --storagectl "IDE Controller" --port 0 --device 1 --type dvddrive --medium $HOME"/Downloads/gparted-live-0.22.0-2-i586.iso" &
-wait
+vboxmanage storageattach `ls /mnt/data1/vm_files` --storagectl "IDE Controller" --port 0 --device 1 --type dvddrive --medium $HOME"/Downloads/gparted-live-0.22.0-2-i586.iso" 
+vboxmanage storageattach `ls /mnt/data2/vm_files` --storagectl "IDE Controller" --port 0 --device 1 --type dvddrive --medium $HOME"/Downloads/gparted-live-0.22.0-2-i586.iso" 
+vboxmanage storageattach `ls /mnt/data3/vm_files` --storagectl "IDE Controller" --port 0 --device 1 --type dvddrive --medium $HOME"/Downloads/gparted-live-0.22.0-2-i586.iso" 
+vboxmanage storageattach `ls /mnt/data4/vm_files` --storagectl "IDE Controller" --port 0 --device 1 --type dvddrive --medium $HOME"/Downloads/gparted-live-0.22.0-2-i586.iso" 
+
 
 echo -e "changing boot order -- dvd first, hard disk second\n"
-vboxmanage modifyvm `ls /mnt/data1/vm_files` --boot1 dvd --boot2 disk &
-vboxmanage modifyvm `ls /mnt/data2/vm_files` --boot1 dvd --boot2 disk &
-vboxmanage modifyvm `ls /mnt/data3/vm_files` --boot1 dvd --boot2 disk &
-vboxmanage modifyvm `ls /mnt/data4/vm_files` --boot1 dvd --boot2 disk &
-wait
+vboxmanage modifyvm `ls /mnt/data1/vm_files` --boot1 dvd --boot2 disk 
+vboxmanage modifyvm `ls /mnt/data2/vm_files` --boot1 dvd --boot2 disk 
+vboxmanage modifyvm `ls /mnt/data3/vm_files` --boot1 dvd --boot2 disk 
+vboxmanage modifyvm `ls /mnt/data4/vm_files` --boot1 dvd --boot2 disk 
 
 echo -e "----------------------------------------------------------\n"
 echo -e "\nincrease partition size /dev/sd2 to as much as possible\n"
@@ -118,17 +119,15 @@ read _var
 
 
 echo -e "removing dvd storage unit and restoring boot order\n"
-vboxmanage storageattach `ls /mnt/data1/vm_files` --storagectl "IDE Controller" --port 0 --device 1 --type dvddrive --medium none &
-vboxmanage storageattach `ls /mnt/data2/vm_files` --storagectl "IDE Controller" --port 0 --device 1 --type dvddrive --medium none &
-vboxmanage storageattach `ls /mnt/data3/vm_files` --storagectl "IDE Controller" --port 0 --device 1 --type dvddrive --medium none &
-vboxmanage storageattach `ls /mnt/data4/vm_files` --storagectl "IDE Controller" --port 0 --device 1 --type dvddrive --medium none &
-wait
+vboxmanage storageattach `ls /mnt/data1/vm_files` --storagectl "IDE Controller" --port 0 --device 1 --type dvddrive --medium none
+vboxmanage storageattach `ls /mnt/data2/vm_files` --storagectl "IDE Controller" --port 0 --device 1 --type dvddrive --medium none
+vboxmanage storageattach `ls /mnt/data3/vm_files` --storagectl "IDE Controller" --port 0 --device 1 --type dvddrive --medium none
+vboxmanage storageattach `ls /mnt/data4/vm_files` --storagectl "IDE Controller" --port 0 --device 1 --type dvddrive --medium none
 
-vboxmanage modifyvm `ls /mnt/data1/vm_files` --boot1 disk --boot2 dvd &
-vboxmanage modifyvm `ls /mnt/data2/vm_files` --boot1 disk --boot2 dvd &
-vboxmanage modifyvm `ls /mnt/data3/vm_files` --boot1 disk --boot2 dvd &
-vboxmanage modifyvm `ls /mnt/data4/vm_files` --boot1 disk --boot2 dvd &
-wait
+vboxmanage modifyvm `ls /mnt/data1/vm_files` --boot1 disk --boot2 dvd
+vboxmanage modifyvm `ls /mnt/data2/vm_files` --boot1 disk --boot2 dvd
+vboxmanage modifyvm `ls /mnt/data3/vm_files` --boot1 disk --boot2 dvd
+vboxmanage modifyvm `ls /mnt/data4/vm_files` --boot1 disk --boot2 dvd
 
 echo -e "bringing new virtual images up with vagrant\n"
 cd ~/projects/udaprague/hdp_setup/vagrant_files/
