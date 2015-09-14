@@ -109,7 +109,7 @@ vboxmanage modifyvm `ls /mnt/data2/vm_files` --boot1 dvd --boot2 disk
 vboxmanage modifyvm `ls /mnt/data3/vm_files` --boot1 dvd --boot2 disk 
 vboxmanage modifyvm `ls /mnt/data4/vm_files` --boot1 dvd --boot2 disk 
 
-echo -e "\n\n starting manual phase @ `date` \n\n" >> timer.out
+echo -e "\n\n starting manual phase @ `date` \n\n" >> ~/projects/udaprague/hdp_setup/vagrant_files/timer.out
 echo -e "----------------------------------------------------------\n"
 echo -e "\nincrease partition size /dev/sd2 to as much as possible\n"
 echo -e "save and reboot"
@@ -118,7 +118,7 @@ echo -e "(hit enter when done)\n"
 echo -e "----------------------------------------------------------\n"
 read _var
 
-echo -e "\n\n completed manual phase @ `date` \n\n" >> timer.out
+echo -e "\n\n completed manual phase @ `date` \n\n" >> ~/projects/udaprague/hdp_setup/vagrant_files/timer.out
 echo -e "removing dvd storage unit and restoring boot order\n"
 vboxmanage storageattach `ls /mnt/data1/vm_files` --storagectl "IDE Controller" --port 0 --device 1 --type dvddrive --medium none
 vboxmanage storageattach `ls /mnt/data2/vm_files` --storagectl "IDE Controller" --port 0 --device 1 --type dvddrive --medium none
